@@ -15,13 +15,13 @@ chrome.browserAction.onClicked.addListener(function(tab) {
   // 状態をバッジとして表示する
   if (isTranslate){
     chrome.browserAction.setBadgeText({text : "ON" });
-    console.log("クリックon");
+    // console.log("クリックon");
     chrome.windows.getCurrent(function(window){
       var winId = window.id;
       chrome.storage.local.set({ 'currentWindowId': winId }, function() {});
     });
   }else{
-    console.log("クリックoff");
+    // console.log("クリックoff");
     chrome.browserAction.setBadgeText({text: ""});
     chrome.storage.local.clear();
   }
@@ -32,9 +32,11 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 
 /* ==================================================
 別ウィンドウを開いたときに自動で閉じる
+閉じるのはいいんだけどloadingが完了するまで画面に表示されるなぁ…
+windowが開くのをそもそも禁止するようにしないとかも
 ==================================================  */
 chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,thisTab){ 
-
+console.log(thisTab);// この時点での検知がちょっと遅い
   chrome.storage.local.get('currentWindowId', function ( data ) {
     var winId = Object.values(data);
     if (Object.keys(data).length) {
@@ -42,17 +44,15 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,thisTab){
 
       // 別ウィンドウを開いたときの処理
       if(changeInfo.status == "loading" && winId[0] !== thisTab.windowId){
-        console.log(winId[0]);
-        console.log(thisTab.windowId);
-        alert("別ウィンドウです");
+        // console.log(winId[0]);
+        // console.log(thisTab.windowId);
+        // alert("別ウィンドウです");
         console.log("別ウィンドウだよー");
-        // chrome.windows.remove(thisTab.windowId);
+        chrome.windows.remove(thisTab.windowId);
     
       }
-      
     }
   });
-
 });
 
 
