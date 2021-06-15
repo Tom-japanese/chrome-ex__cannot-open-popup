@@ -29,13 +29,15 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 
 
 
-
 /* ==================================================
 別ウィンドウを開いたときに自動で閉じる
 閉じるのはいいんだけどloadingが完了するまで画面に表示されるなぁ…
 windowが開くのをそもそも禁止するようにしないとかも
+window.onblurで別ウィンドウが開くのを検知して開かせないとか？
+そもそもリクエストを取得してそのリクエストを飛ばせないようにしたいかも
 ==================================================  */
 chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,thisTab){ 
+  console.log("test");
 console.log(thisTab);// この時点での検知がちょっと遅い
   chrome.storage.local.get('currentWindowId', function ( data ) {
     var winId = Object.values(data);
